@@ -223,15 +223,6 @@ dotnet ef database update --project OpenBusiness.Crm.Api
 dotnet ef migrations remove --project OpenBusiness.Crm.Api
 ```
 
-## Known Limitations
-
-1. **No refresh tokens** - Access tokens only (60 min). Immediate revocation not supported.
-2. **In-memory rate limiting** - Per-process only; not distributed across instances.
-3. **No email confirmation** - `RequireConfirmedEmail = false` for demo simplicity.
-4. **No audit logging** - Entity changes not tracked beyond `UpdatedAt`.
-5. **No admin UI** - Role/tenant management via direct DB or future API.
-6. **CORS** - Must configure for production origins.
-
 ## Project Structure
 
 ```
