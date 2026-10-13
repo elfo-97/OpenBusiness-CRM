@@ -1,0 +1,11 @@
+E:\OpenBusiness\OpenBusiness CRM\OpenBusiness.Crm.Domain\bin\Debug\net10.0\OpenBusiness.Crm.Domain.deps.json
+E:\OpenBusiness\OpenBusiness CRM\OpenBusiness.Crm.Domain\bin\Debug\net10.0\OpenBusiness.Crm.Domain.dll
+E:\OpenBusiness\OpenBusiness CRM\OpenBusiness.Crm.Domain\bin\Debug\net10.0\OpenBusiness.Crm.Domain.pdb
+E:\OpenBusiness\OpenBusiness CRM\OpenBusiness.Crm.Domain\obj\Debug\net10.0\OpenBusiness.Crm.Domain.GeneratedMSBuildEditorConfig.editorconfig
+E:\OpenBusiness\OpenBusiness CRM\OpenBusiness.Crm.Domain\obj\Debug\net10.0\OpenBusiness.Crm.Domain.AssemblyInfoInputs.cache
+E:\OpenBusiness\OpenBusiness CRM\OpenBusiness.Crm.Domain\obj\Debug\net10.0\OpenBusiness.Crm.Domain.AssemblyInfo.cs
+E:\OpenBusiness\OpenBusiness CRM\OpenBusiness.Crm.Domain\obj\Debug\net10.0\OpenBusiness.Crm.Domain.csproj.CoreCompileInputs.cache
+E:\OpenBusiness\OpenBusiness CRM\OpenBusiness.Crm.Domain\obj\Debug\net10.0\OpenBusiness.Crm.Domain.dll
+E:\OpenBusiness\OpenBusiness CRM\OpenBusiness.Crm.Domain\obj\Debug\net10.0\refint\OpenBusiness.Crm.Domain.dll
+E:\OpenBusiness\OpenBusiness CRM\OpenBusiness.Crm.Domain\obj\Debug\net10.0\OpenBusiness.Crm.Domain.pdb
+E:\OpenBusiness\OpenBusiness CRM\OpenBusiness.Crm.Domain\obj\Debug\net10.0\ref\OpenBusiness.Crm.Domain.dll

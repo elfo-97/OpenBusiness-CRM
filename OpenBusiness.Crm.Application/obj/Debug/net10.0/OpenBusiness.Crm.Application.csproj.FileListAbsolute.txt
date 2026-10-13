@@ -1,0 +1,15 @@
+E:\OpenBusiness\OpenBusiness CRM\OpenBusiness.Crm.Application\bin\Debug\net10.0\OpenBusiness.Crm.Application.deps.json
+E:\OpenBusiness\OpenBusiness CRM\OpenBusiness.Crm.Application\bin\Debug\net10.0\OpenBusiness.Crm.Application.dll
+E:\OpenBusiness\OpenBusiness CRM\OpenBusiness.Crm.Application\bin\Debug\net10.0\OpenBusiness.Crm.Application.pdb
+E:\OpenBusiness\OpenBusiness CRM\OpenBusiness.Crm.Application\bin\Debug\net10.0\OpenBusiness.Crm.Domain.dll
+E:\OpenBusiness\OpenBusiness CRM\OpenBusiness.Crm.Application\bin\Debug\net10.0\OpenBusiness.Crm.Domain.pdb
+E:\OpenBusiness\OpenBusiness CRM\OpenBusiness.Crm.Application\obj\Debug\net10.0\OpenBusiness.Crm.Application.csproj.AssemblyReference.cache
+E:\OpenBusiness\OpenBusiness CRM\OpenBusiness.Crm.Application\obj\Debug\net10.0\OpenBusiness.Crm.Application.GeneratedMSBuildEditorConfig.editorconfig
+E:\OpenBusiness\OpenBusiness CRM\OpenBusiness.Crm.Application\obj\Debug\net10.0\OpenBusiness.Crm.Application.AssemblyInfoInputs.cache
+E:\OpenBusiness\OpenBusiness CRM\OpenBusiness.Crm.Application\obj\Debug\net10.0\OpenBusiness.Crm.Application.AssemblyInfo.cs
+E:\OpenBusiness\OpenBusiness CRM\OpenBusiness.Crm.Application\obj\Debug\net10.0\OpenBusiness.Crm.Application.csproj.CoreCompileInputs.cache
+E:\OpenBusiness\OpenBusiness CRM\OpenBusiness.Crm.Application\obj\Debug\net10.0\OpenBusi.DC48B7DE.Up2Date
+E:\OpenBusiness\OpenBusiness CRM\OpenBusiness.Crm.Application\obj\Debug\net10.0\OpenBusiness.Crm.Application.dll
+E:\OpenBusiness\OpenBusiness CRM\OpenBusiness.Crm.Application\obj\Debug\net10.0\refint\OpenBusiness.Crm.Application.dll
+E:\OpenBusiness\OpenBusiness CRM\OpenBusiness.Crm.Application\obj\Debug\net10.0\OpenBusiness.Crm.Application.pdb
+E:\OpenBusiness\OpenBusiness CRM\OpenBusiness.Crm.Application\obj\Debug\net10.0\ref\OpenBusiness.Crm.Application.dll

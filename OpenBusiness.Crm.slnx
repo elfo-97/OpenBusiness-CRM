@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="OpenBusiness.Crm.Api/OpenBusiness.Crm.Api.csproj" />
+  <Project Path="OpenBusiness.Crm.Application/OpenBusiness.Crm.Application.csproj" />
+  <Project Path="OpenBusiness.Crm.Domain/OpenBusiness.Crm.Domain.csproj" />
+  <Project Path="OpenBusiness.Crm.Tests/OpenBusiness.Crm.Tests.csproj" />
+</Solution>
