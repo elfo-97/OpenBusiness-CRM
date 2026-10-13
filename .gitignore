@@ -1,0 +1,35 @@
+# Build outputs
+bin/
+obj/
+
+# IDE
+.vs/
+.idea/
+*.user
+*.suo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# NuGet
+packages/
+*.nupkg
+
+# Logs
+*.log
+
+# Test results
+TestResults/
+*.trx
+
+# Database
+*.db
+*.sqlite
+
+# Local config
+appsettings.Development.json
+appsettings.Local.json
+
+# IDEA.md - excluded from commits per user request
+IDEA.md
