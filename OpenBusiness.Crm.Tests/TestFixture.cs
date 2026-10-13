@@ -7,6 +7,7 @@ using OpenBusiness.Crm.Api.Security;
 using OpenBusiness.Crm.Api.Services.Customers;
 using OpenBusiness.Crm.Api.Services.Leads;
 using OpenBusiness.Crm.Api.Services.Activities;
+using OpenBusiness.Crm.Api.Services.Contacts;
 
 namespace OpenBusiness.Crm.Tests;
 
@@ -30,6 +31,7 @@ public sealed class TestFixture : IAsyncLifetime
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<ILeadService, LeadService>();
         services.AddScoped<IActivityService, ActivityService>();
+        services.AddScoped<IContactService, ContactService>();
 
         services.AddHttpContextAccessor();
 

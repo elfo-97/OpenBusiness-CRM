@@ -6,6 +6,7 @@ using OpenBusiness.Crm.Api.Security;
 using OpenBusiness.Crm.Api.Services.Customers;
 using OpenBusiness.Crm.Api.Services.Leads;
 using OpenBusiness.Crm.Api.Services.Activities;
+using OpenBusiness.Crm.Api.Services.Contacts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,7 @@ builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpContextAccessor>().H
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<ILeadService, LeadService>();
 builder.Services.AddScoped<IActivityService, ActivityService>();
+builder.Services.AddScoped<IContactService, ContactService>();
 
 var app = builder.Build();
 
