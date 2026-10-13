@@ -1,13 +1,15 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using OpenBusiness.Crm.Api.Data;
-using OpenBusiness.Crm.Api.Middleware;
 using OpenBusiness.Crm.Api.Security;
+using OpenBusiness.Crm.Api.Services.Auth;
 using OpenBusiness.Crm.Api.Services.Customers;
 using OpenBusiness.Crm.Api.Services.Leads;
 using OpenBusiness.Crm.Api.Services.Activities;
 using OpenBusiness.Crm.Api.Services.Contacts;
+using OpenBusiness.Crm.Domain;
 
 namespace OpenBusiness.Crm.Tests;
 
@@ -15,7 +17,7 @@ public sealed class TestFixture : IAsyncLifetime
 {
     public IServiceProvider Services { get; private set; } = default!;
     public ApplicationDbContext DbContext { get; private set; } = default!;
-    public TenantContext TenantContext { get; private set; } = default!;
+    public CurrentUser CurrentUser { get; private set; } = default!;
     public Guid TenantId { get; } = Guid.NewGuid();
     public Guid UserId { get; } = Guid.NewGuid();
 
@@ -26,8 +28,27 @@ public sealed class TestFixture : IAsyncLifetime
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseInMemoryDatabase($"TestDb_{Guid.NewGuid()}"));
 
-        services.AddScoped<ITenantResolver, TestTenantResolver>();
-        services.AddScoped(_ => TenantContext);
+        services.AddLogging();
+
+        services.AddIdentity<ApplicationUser, ApplicationRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
+
+        // Register JwtSettings for tests
+        services.AddSingleton(new JwtSettings
+        {
+            SecretKey = "TestSecretKeyThatIsLongEnoughForHS256Algorithm12345",
+            Issuer = "OpenBusiness.Crm",
+            Audience = "OpenBusiness.Crm.Api",
+            ExpiryMinutes = 60
+        });
+        services.AddScoped<JwtTokenGenerator>();
+
+        // Register TestFixture as singleton so TestCurrentUserService can resolve it
+        services.AddSingleton(this);
+
+        services.AddScoped<ICurrentUserService, TestCurrentUserService>();
+        services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<ILeadService, LeadService>();
         services.AddScoped<IActivityService, ActivityService>();
@@ -40,7 +61,36 @@ public sealed class TestFixture : IAsyncLifetime
         DbContext = Services.GetRequiredService<ApplicationDbContext>();
         await DbContext.Database.EnsureCreatedAsync();
 
-        TenantContext = TenantContext.Create(TenantId, UserId, "test@example.com", "Test User");
+        // Create test tenant and user in database
+        var tenant = new Tenant("Test Tenant", "test-tenant");
+        tenant.GetType().GetProperty("Id")?.SetValue(tenant, TenantId);
+        DbContext.Tenants.Add(tenant);
+
+        var user = new ApplicationUser
+        {
+            Id = UserId,
+            UserName = "test@example.com",
+            Email = "test@example.com",
+            FullName = "Test User",
+            TenantId = TenantId,
+            Role = UserRole.Owner,
+            IsActive = true,
+            EmailConfirmed = true
+        };
+
+        var userManager = Services.GetRequiredService<UserManager<ApplicationUser>>();
+        await userManager.CreateAsync(user, "Test@123");
+        await userManager.AddToRoleAsync(user, "Owner");
+
+        CurrentUser = new CurrentUser
+        {
+            UserId = UserId,
+            TenantId = TenantId,
+            Email = "test@example.com",
+            FullName = "Test User",
+            Role = "Owner",
+            IsAuthenticated = true
+        };
     }
 
     public async Task DisposeAsync()
@@ -55,25 +105,19 @@ public sealed class TestFixture : IAsyncLifetime
         }
     }
 
-    public async Task ResetAsync()
+    private sealed class TestCurrentUserService : ICurrentUserService
     {
-        if (DbContext != null)
-        {
-            await DbContext.Database.EnsureDeletedAsync();
-            await DbContext.Database.EnsureCreatedAsync();
-        }
-    }
+        private readonly TestFixture _fixture;
 
-    private sealed class TestTenantResolver : ITenantResolver
-    {
-        private readonly TenantContext _context;
-
-        public TestTenantResolver(TenantContext context)
+        public TestCurrentUserService(TestFixture fixture)
         {
-            _context = context;
+            _fixture = fixture;
         }
 
-        public Task<TenantContext> ResolveAsync(HttpContext context)
-            => Task.FromResult(_context);
+        public CurrentUser GetCurrentUser()
+            => _fixture.CurrentUser;
+
+        public Task<CurrentUser> GetCurrentUserAsync(CancellationToken ct = default)
+            => Task.FromResult(_fixture.CurrentUser);
     }
 }

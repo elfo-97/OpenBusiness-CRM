@@ -18,18 +18,19 @@ public interface IContactService
 public sealed class ContactService : IContactService
 {
     private readonly ApplicationDbContext _db;
-    private readonly TenantContext _tenantContext;
+    private readonly ICurrentUserService _currentUser;
 
-    public ContactService(ApplicationDbContext db, TenantContext tenantContext)
+    public ContactService(ApplicationDbContext db, ICurrentUserService currentUser)
     {
         _db = db;
-        _tenantContext = tenantContext;
+        _currentUser = currentUser;
     }
+
+    private Guid TenantId => _currentUser.GetCurrentUser().TenantId;
 
     public async Task<ContactResponse> CreateAsync(CreateContactRequest request, CancellationToken ct = default)
     {
-        var tenantId = _tenantContext.TenantId;
-        var contact = new Contact(tenantId, request.CustomerId, request.Name, request.Email, request.Phone, request.Role, request.IsPrimary);
+        var contact = new Contact(TenantId, request.CustomerId, request.Name, request.Email, request.Phone, request.Role, request.IsPrimary);
         _db.Contacts.Add(contact);
         await _db.SaveChangesAsync(ct);
         return Map(contact);
@@ -37,19 +38,17 @@ public sealed class ContactService : IContactService
 
     public async Task<ContactResponse?> GetAsync(Guid id, CancellationToken ct = default)
     {
-        var tenantId = _tenantContext.TenantId;
         var contact = await _db.Contacts
-            .FirstOrDefaultAsync(c => c.Id == id && c.TenantId == tenantId, ct);
+            .FirstOrDefaultAsync(c => c.Id == id && c.TenantId == TenantId, ct);
         return contact is null ? null : Map(contact);
     }
 
     public async Task<IReadOnlyList<ContactResponse>> ListAsync(Guid customerId, int page = 1, int pageSize = 20, CancellationToken ct = default)
     {
-        var tenantId = _tenantContext.TenantId;
         page = Math.Max(1, page);
         pageSize = Math.Clamp(pageSize, 1, 100);
         var contacts = await _db.Contacts
-            .Where(c => c.TenantId == tenantId && c.CustomerId == customerId)
+            .Where(c => c.TenantId == TenantId && c.CustomerId == customerId)
             .OrderByDescending(c => c.CreatedAt)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
@@ -59,9 +58,8 @@ public sealed class ContactService : IContactService
 
     public async Task<ContactResponse?> UpdateAsync(Guid id, UpdateContactRequest request, CancellationToken ct = default)
     {
-        var tenantId = _tenantContext.TenantId;
         var contact = await _db.Contacts
-            .FirstOrDefaultAsync(c => c.Id == id && c.TenantId == tenantId, ct);
+            .FirstOrDefaultAsync(c => c.Id == id && c.TenantId == TenantId, ct);
         if (contact is null) return null;
         contact.Update(request.Name, request.Email, request.Phone, request.Role, request.IsPrimary);
         await _db.SaveChangesAsync(ct);
@@ -70,9 +68,8 @@ public sealed class ContactService : IContactService
 
     public async Task<bool> DeleteAsync(Guid id, CancellationToken ct = default)
     {
-        var tenantId = _tenantContext.TenantId;
         var contact = await _db.Contacts
-            .FirstOrDefaultAsync(c => c.Id == id && c.TenantId == tenantId, ct);
+            .FirstOrDefaultAsync(c => c.Id == id && c.TenantId == TenantId, ct);
         if (contact is null) return false;
         contact.Deactivate();
         await _db.SaveChangesAsync(ct);

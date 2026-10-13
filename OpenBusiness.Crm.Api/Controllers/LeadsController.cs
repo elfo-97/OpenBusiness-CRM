@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OpenBusiness.Crm.Application.Leads;
 using OpenBusiness.Crm.Api.Services.Leads;
@@ -6,6 +7,7 @@ namespace OpenBusiness.Crm.Api.Controllers;
 
 [ApiController]
 [Route("api/leads")]
+[Authorize(Policy = "MemberOrAbove")]
 public sealed class LeadsController : ControllerBase
 {
     private readonly ILeadService _leadService;

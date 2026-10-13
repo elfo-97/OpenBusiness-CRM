@@ -16,19 +16,20 @@ public interface IActivityService
 public sealed class ActivityService : IActivityService
 {
     private readonly ApplicationDbContext _db;
-    private readonly TenantContext _tenantContext;
+    private readonly ICurrentUserService _currentUser;
 
-    public ActivityService(ApplicationDbContext db, TenantContext tenantContext)
+    public ActivityService(ApplicationDbContext db, ICurrentUserService currentUser)
     {
         _db = db;
-        _tenantContext = tenantContext;
+        _currentUser = currentUser;
     }
+
+    private Guid TenantId => _currentUser.GetCurrentUser().TenantId;
+    private Guid UserId => _currentUser.GetCurrentUser().UserId;
 
     public async Task<ActivityResponse> CreateAsync(CreateActivityRequest request, CancellationToken ct = default)
     {
-        var tenantId = _tenantContext.TenantId;
-        var userId = _tenantContext.UserId;
-        var activity = new Activity(tenantId, userId, request.Type, request.Subject, request.Description, request.CustomerId, request.LeadId, request.OccurredAt);
+        var activity = new Activity(TenantId, UserId, request.Type, request.Subject, request.Description, request.CustomerId, request.LeadId, request.OccurredAt);
         _db.Activities.Add(activity);
         await _db.SaveChangesAsync(ct);
         return Map(activity);
@@ -36,19 +37,17 @@ public sealed class ActivityService : IActivityService
 
     public async Task<ActivityResponse?> GetAsync(Guid id, CancellationToken ct = default)
     {
-        var tenantId = _tenantContext.TenantId;
         var activity = await _db.Activities
-            .FirstOrDefaultAsync(a => a.Id == id && a.TenantId == tenantId, ct);
+            .FirstOrDefaultAsync(a => a.Id == id && a.TenantId == TenantId, ct);
         return activity is null ? null : Map(activity);
     }
 
     public async Task<IReadOnlyList<ActivityResponse>> ListAsync(Guid? customerId = null, Guid? leadId = null, int page = 1, int pageSize = 20, CancellationToken ct = default)
     {
-        var tenantId = _tenantContext.TenantId;
         page = Math.Max(1, page);
         pageSize = Math.Clamp(pageSize, 1, 100);
 
-        var query = _db.Activities.Where(a => a.TenantId == tenantId);
+        var query = _db.Activities.Where(a => a.TenantId == TenantId);
 
         if (customerId.HasValue)
             query = query.Where(a => a.CustomerId == customerId.Value);

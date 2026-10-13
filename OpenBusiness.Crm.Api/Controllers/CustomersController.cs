@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OpenBusiness.Crm.Application.Customers;
 using OpenBusiness.Crm.Api.Services.Customers;
@@ -6,6 +7,7 @@ namespace OpenBusiness.Crm.Api.Controllers;
 
 [ApiController]
 [Route("api/customers")]
+[Authorize(Policy = "MemberOrAbove")]
 public sealed class CustomersController : ControllerBase
 {
     private readonly ICustomerService _customerService;

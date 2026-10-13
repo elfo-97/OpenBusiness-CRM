@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OpenBusiness.Crm.Application.Activities;
 using OpenBusiness.Crm.Api.Services.Activities;
@@ -6,6 +7,7 @@ namespace OpenBusiness.Crm.Api.Controllers;
 
 [ApiController]
 [Route("api/activities")]
+[Authorize(Policy = "MemberOrAbove")]
 public sealed class ActivitiesController : ControllerBase
 {
     private readonly IActivityService _activityService;

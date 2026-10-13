@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OpenBusiness.Crm.Application.Contacts;
 using OpenBusiness.Crm.Api.Services.Contacts;
@@ -6,6 +7,7 @@ namespace OpenBusiness.Crm.Api.Controllers;
 
 [ApiController]
 [Route("api/customers/{customerId:guid}/contacts")]
+[Authorize(Policy = "MemberOrAbove")]
 public sealed class ContactsController : ControllerBase
 {
     private readonly IContactService _contactService;
